@@ -77,7 +77,7 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 
 ## Owner configuration checklist
 
-1. ~~Business name~~ **TenderPro, confirmed.** Still to do: confirm the legal entity and set `legalEntity` in `src/config/site.ts`. Check whether "TenderPro" needs registering as a business name, or whether it is already registered by someone else.
+1. ~~Business name~~ **TenderPro, confirmed.** The legal entity is a different name (confirmed by Steve). Still to do: give its exact registered name and set `legalEntity` in `src/config/site.ts`. Check whether "TenderPro" needs registering as a business name, or whether it is already registered by someone else.
 2. Add at least one real contact method (`email`, `phone`, `whatsapp`) and optional `hours`. Leave unknown ones `null`.
 3. Decide the domain, add it to Vercel, and set `domain` (bare, e.g. `example.co.ke`).
 4. Set up the lead destination (e.g. `docs/lead-webhook.gs` into your lead tracker sheet) and add `LEAD_WEBHOOK_URL` and `LEAD_WEBHOOK_SECRET` in Vercel. Submit a test lead and confirm it arrives with its reference.
