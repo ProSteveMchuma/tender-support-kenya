@@ -94,7 +94,7 @@ The `/tender-security-support` page describes the service as **facilitation only
 1. ~~Liaising with issuers on a client's behalf~~ **Confirmed by Steve (23 Nov 2026).** The page now says you deal with the issuer on the client's behalf "with your written authority". Still to do: prepare the short client authority letter you will use, and check whether each issuer needs its own mandate form.
 2. Which issuer types to mention. The page currently says "bank, insurer or other institution the tender accepts". Confirm this matches current Kenyan practice and the tenders you handle.
 3. The Tender Securing Declaration wording. The page says only that "some tenders accept a Tender Securing Declaration instead of a security". If you want to say *when* (for example for particular procurement methods or AGPO-registered groups), confirm the current rule first. I did not state one.
-4. Whether to offer post-award support for performance securities, advance payment guarantees and extensions. The page includes it under "After award"; remove that section if you don't want it.
+4. ~~Post-award support~~ **Confirmed by Steve (23 Nov 2026):** keep the "After award" section covering performance securities, advance payment guarantees and extensions.
 5. Typical issuer lead times, if you want to publish guidance. The page currently says only "start as early as possible".
 
 Set `services.securities` to `"unavailable"` in `src/config/site.ts` to hide the page content if you pause this service. The nav, card and form option should then also be removed from `src/config/content.ts` and `src/lib/validation.ts`.
