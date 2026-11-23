@@ -89,13 +89,13 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 
 ## Tender security support: facts for the owner to confirm
 
-The `/tender-security-support` page describes the service as **facilitation only**: reading the requirement, preparing the application and prescribed form wording, dealing with the client's chosen issuer on their behalf (confirmed by the owner), with written authority, and checking the issued document against the tender. It says plainly that the business does not issue, guarantee or finance securities, that issuer fees are paid by the client, and that the support is quoted separately. It names no banks or insurers. Please confirm before launch:
+The `/tender-security-support` page describes the service as **facilitation only**: reading the requirement, preparing the application and prescribed form wording, dealing with the client's chosen issuer on their behalf (confirmed by the owner), with written authority, and checking the issued document against the tender. It says plainly that the business does not issue, guarantee or finance securities, that issuer fees are paid by the client, and that the support is quoted separately. It names no banks or insurers. Status of each point:
 
 1. ~~Liaising with issuers on a client's behalf~~ **Confirmed by Steve (23 Nov 2026).** The page now says you deal with the issuer on the client's behalf "with your written authority". Still to do: prepare the short client authority letter you will use, and check whether each issuer needs its own mandate form.
-2. Which issuer types to mention. The page currently says "bank, insurer or other institution the tender accepts". Confirm this matches current Kenyan practice and the tenders you handle.
-3. The Tender Securing Declaration wording. The page says only that "some tenders accept a Tender Securing Declaration instead of a security". If you want to say *when* (for example for particular procurement methods or AGPO-registered groups), confirm the current rule first. I did not state one.
+2. **Issuer types (decided 23 Nov 2026, owner asked Claude to choose):** named generically as "banks, insurance companies or other institutions the tender permits". No firms are named.
+3. **Tender Securing Declaration (decided 23 Nov 2026):** explained in general terms as a signed undertaking some tenders ask for instead of a security, with "whether one applies depends on the tender's own instructions". No rule about procurement methods or AGPO groups is stated. Add one only after checking the current regulations.
 4. ~~Post-award support~~ **Confirmed by Steve (23 Nov 2026):** keep the "After award" section covering performance securities, advance payment guarantees and extensions.
-5. Typical issuer lead times, if you want to publish guidance. The page currently says only "start as early as possible".
+5. **Lead times (decided 23 Nov 2026):** no fixed times published. The page says processing times vary by issuer and to start as early as possible.
 
 Set `services.securities` to `"unavailable"` in `src/config/site.ts` to hide the page content if you pause this service. The nav, card and form option should then also be removed from `src/config/content.ts` and `src/lib/validation.ts`.
 

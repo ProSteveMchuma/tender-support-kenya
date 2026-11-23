@@ -53,10 +53,10 @@ export default function Page() {
           <div className="note-card">
             <h3 className="h4"><Icon name="info" size={20} /> Good to know</h3>
             <ul>
-              <li>We do not issue, guarantee or finance securities. The issuer decides whether to issue one, on its own terms, and may ask for collateral or cash cover.</li>
+              <li>Securities are issued by banks, insurance companies or other institutions the tender permits. We do not issue, guarantee or finance them; the issuer decides on its own terms and may ask for collateral or cash cover.</li>
               <li>Issuer fees, commissions and any collateral are between you and the issuer, and paid by you directly. Our support is quoted separately, with any applicable taxes set out in the quotation.</li>
-              <li>Issuers need time. Start as early as possible; we will tell you honestly if the deadline looks too close.</li>
-              <li>Some tenders accept a Tender Securing Declaration instead of a security. We help you complete it where the tender allows it.</li>
+              <li>Processing times vary by issuer, so start as early as possible. We will tell you honestly if the deadline looks too close.</li>
+              <li>Some tenders ask for a Tender Securing Declaration, a signed undertaking, instead of a security. Whether one applies depends on the tender’s own instructions; we check, and help you complete it in the prescribed form.</li>
             </ul>
           </div>
         </div>
