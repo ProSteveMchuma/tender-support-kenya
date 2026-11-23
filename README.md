@@ -1,8 +1,8 @@
-# Tender Support Kenya (working preview)
+# TenderPro (working preview)
 
 Lead-generation and service-intake website for a Kenyan tender-support business: tender sourcing (interest registration), separately quoted tender preparation, tender security support (bid bonds and guarantees, facilitated with the client's chosen issuer), and optional printing and submission support.
 
-"Tender Support Kenya" is a descriptive working name, not a confirmed brand. The site ships in **preview mode**: noindex everywhere, a visible preview notice, and forms that say "Preview only — your request has not been sent." until a real lead destination is configured.
+The trading name is **TenderPro** (confirmed by Steve, 23 Nov 2026). The legal entity is still unconfirmed, so the footer shows the trading name only. The site ships in **preview mode**: noindex everywhere, a visible preview notice, and forms that say "Preview only — your request has not been sent." until a real lead destination is configured.
 
 ## Stack
 
@@ -77,7 +77,7 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 
 ## Owner configuration checklist
 
-1. Confirm the business name and legal entity; set `name`, `nameIsConfirmed`, `legalEntity` in `src/config/site.ts`.
+1. ~~Business name~~ **TenderPro, confirmed.** Still to do: confirm the legal entity and set `legalEntity` in `src/config/site.ts`. Check whether "TenderPro" needs registering as a business name, or whether it is already registered by someone else.
 2. Add at least one real contact method (`email`, `phone`, `whatsapp`) and optional `hours`. Leave unknown ones `null`.
 3. Decide the domain, add it to Vercel, and set `domain` (bare, e.g. `example.co.ke`).
 4. Set up the lead destination (e.g. `docs/lead-webhook.gs` into your lead tracker sheet) and add `LEAD_WEBHOOK_URL` and `LEAD_WEBHOOK_SECRET` in Vercel. Submit a test lead and confirm it arrives with its reference.

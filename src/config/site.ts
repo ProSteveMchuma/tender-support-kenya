@@ -16,7 +16,7 @@ export type SourcingMode = "interest" | "paid";
 export type Availability = "available" | "on-request" | "unavailable";
 
 export interface SiteConfig {
-  /** Descriptive working name. Not a confirmed registered brand. */
+  /** Trading name confirmed by the owner. Legal entity is separate (see legalEntity). */
   name: string;
   nameIsConfirmed: boolean;
   shortDescription: string;
@@ -84,8 +84,8 @@ export interface SiteConfig {
 }
 
 export const site: SiteConfig = {
-  name: "Tender Support Kenya",
-  nameIsConfirmed: false,
+  name: "TenderPro",
+  nameIsConfirmed: true,
   shortDescription:
     "Tender sourcing, expert-reviewed tender preparation and optional printing support for Kenyan businesses.",
   founderLine: "Led by Steve Kaleke, tender preparation specialist.",
