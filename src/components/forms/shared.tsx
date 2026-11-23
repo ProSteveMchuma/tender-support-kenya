@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useRef, useState } from "react";
 import { getAttribution } from "@/lib/analytics";
+import type { Errors } from "@/lib/validation";
 
 export type SubmitState =
   | { kind: "idle" }
@@ -193,4 +194,39 @@ export function focusFirstError(form: HTMLFormElement | null, _summary?: HTMLDiv
     const target = form?.querySelector<HTMLElement>(".error-summary") ?? form?.querySelector<HTMLElement>("[aria-invalid='true']");
     target?.focus();
   }, 30);
+}
+
+export function StepHeader({
+  step,
+  total,
+  title,
+  headingRef,
+}: {
+  step: number;
+  total: number;
+  title: string;
+  headingRef: React.RefObject<HTMLHeadingElement | null>;
+}) {
+  return (
+    <div className="stepper">
+      <div className="stepper-bar" aria-hidden="true">
+        {Array.from({ length: total }, (_, i) => (
+          <span key={i} data-done={i < step ? "1" : "0"} />
+        ))}
+      </div>
+      <p className="stepper-count">
+        Step {step} of {total}
+      </p>
+      <h3 className="stepper-title" tabIndex={-1} ref={headingRef}>
+        {title}
+      </h3>
+    </div>
+  );
+}
+
+/** Returns only the errors for the given field names. */
+export function pick<T>(errors: Errors<T>, keys: (keyof T)[]): Errors<T> {
+  const out: Errors<T> = {};
+  for (const k of keys) if (errors[k]) out[k] = errors[k];
+  return out;
 }

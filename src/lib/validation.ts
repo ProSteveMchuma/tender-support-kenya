@@ -6,6 +6,7 @@
 export const QUOTE_SERVICES = [
   { value: "preparation", label: "Tender preparation" },
   { value: "review", label: "Review of a bid I have prepared" },
+  { value: "security", label: "Tender or performance security" },
   { value: "printing", label: "Printing, binding and packaging" },
   { value: "submission", label: "Delivery or submission assistance" },
   { value: "unsure", label: "Not sure yet" },
@@ -107,8 +108,10 @@ export function parseQuote(raw: Record<string, unknown>): { data: QuoteInput; er
   if (data.email && !emailOk) e.email = "Enter a valid email address, for example name@company.co.ke.";
   if (data.phone && !phoneOk) e.phone = "Enter a valid phone number, for example 0712 345 678 or +254 712 345 678.";
   if (!data.email && !data.phone) {
-    e.email = "Give an email address or a phone number so we can reply.";
-    e.phone = "Give a phone number or an email address so we can reply.";
+    e.email = data.contactMethod === "email" ? "Enter your email address." : "Give an email address or a phone number so we can reply.";
+    e.phone =
+      data.contactMethod === "whatsapp" ? "Enter your WhatsApp number." :
+      data.contactMethod === "phone" ? "Enter your phone number." : "Give a phone number or an email address so we can reply.";
   }
   if (!e.contactMethod && !e.email && !e.phone) {
     if (data.contactMethod === "email" && !emailOk) e.email = "You chose email. Please add your email address.";

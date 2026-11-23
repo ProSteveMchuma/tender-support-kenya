@@ -1,45 +1,46 @@
-import { site, whatsappLink } from "@/config/site";
+import { site, whatsappDisplay } from "@/config/site";
 import { pageMeta } from "@/lib/seo";
+import { GetStarted } from "@/components/GetStarted";
 import { Icon } from "@/components/Icon";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
-import { QuoteSection, SourcingSection } from "@/components/sections";
+import { PageHero } from "@/components/sections";
 
 export const metadata = pageMeta(
   "/contact",
   "Contact us about tender support",
-  "Request a tender preparation quote or register your interest in tender sourcing in Kenya. Share the official tender link and deadline to start.",
+  "Request a tender preparation quote, get help with a tender security or register interest in tender sourcing in Kenya. Chat on WhatsApp or send a short request.",
 );
 
 export default function Page() {
   const c = site.contact;
-  const wa = whatsappLink();
-  const hasDirect = !!(c.email || c.phone || wa);
+  const wa = whatsappDisplay();
   return (
     <>
-      <section className="page-hero">
-        <div className="wrap">
-          <p className="kicker">Contact</p>
-          <h1>Tell us what you need</h1>
-          <p className="lede">
-            Use the quote form for help with a specific tender, or register interest in tailored sourcing. An official tender
-            link and the deadline are enough to start.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary" href="#quote-form">Request a quote</a>
-            <a className="btn btn-secondary" href="#sourcing-form">Register sourcing interest</a>
-          </div>
-          {hasDirect && (
-            <ul className="contact-list">
-              {c.email && <li><Icon name="mail" size={20} /> <a href={`mailto:${c.email}`}>{c.email}</a></li>}
-              {c.phone && <li><Icon name="phone" size={20} /> <a href={`tel:${c.phone}`}>{c.phone}</a></li>}
-              {wa && <li><Icon name="chat" size={20} /> <WhatsAppLink location="contact_page">Message us on WhatsApp</WhatsAppLink></li>}
-              {c.hours && <li><Icon name="clock" size={20} /> {c.hours}</li>}
-            </ul>
+      <PageHero kicker="Contact" title="Let’s talk about your tender." intro="Send a short request below, or message us directly. An official tender link and the deadline are enough to start." />
+      {(wa || c.email || c.phone) && (
+        <div className="wrap contact-cards">
+          {wa && (
+            <WhatsAppLink location="contact_page" className="contact-card">
+              <span className="card-icon"><Icon name="chat" size={22} /></span>
+              <span><strong>WhatsApp</strong><span className="muted">{wa}</span></span>
+            </WhatsAppLink>
+          )}
+          {c.email && (
+            <a className="contact-card" href={`mailto:${c.email}`}>
+              <span className="card-icon"><Icon name="mail" size={22} /></span>
+              <span><strong>Email</strong><span className="muted">{c.email}</span></span>
+            </a>
+          )}
+          {c.phone && (
+            <a className="contact-card" href={`tel:${c.phone}`}>
+              <span className="card-icon"><Icon name="phone" size={22} /></span>
+              <span><strong>Call</strong><span className="muted">{c.phone}</span></span>
+            </a>
           )}
         </div>
-      </section>
-      <QuoteSection />
-      <SourcingSection />
+      )}
+      <p className="center-note">Please don’t send tender documents, ID numbers or bank details by WhatsApp at this stage.</p>
+      <GetStarted title="Or send a request" />
     </>
   );
 }

@@ -3,13 +3,22 @@ import { formatKsh, isPaidSourcingConfirmed, site } from "@/config/site";
 import { AI_STATEMENT, CONFIDENTIALITY, CTA, FAQS, QUALITY_CONTROLS, SAMPLE_BRIEF, SERVICES, STEPS } from "@/config/content";
 import { CtaLink } from "./CtaLink";
 import { Icon } from "./Icon";
-import { QuoteForm } from "./forms/QuoteForm";
-import { SourcingForm } from "./forms/SourcingForm";
-import type { QuoteService } from "@/lib/validation";
 
-export function SectionHead({ id, kicker, title, intro }: { id?: string; kicker?: string; title: string; intro?: React.ReactNode }) {
+export function SectionHead({
+  id,
+  kicker,
+  title,
+  intro,
+  center = false,
+}: {
+  id?: string;
+  kicker?: string;
+  title: string;
+  intro?: React.ReactNode;
+  center?: boolean;
+}) {
   return (
-    <div className="section-head">
+    <div className={`section-head${center ? " center-head" : ""}`}>
       {kicker && <p className="kicker">{kicker}</p>}
       <h2 id={id}>{title}</h2>
       {intro && <p className="lede">{intro}</p>}
@@ -19,28 +28,25 @@ export function SectionHead({ id, kicker, title, intro }: { id?: string; kicker?
 
 export function ServiceCards() {
   return (
-    <section className="band" aria-labelledby="services-h">
+    <section className="band" id="services" aria-labelledby="services-h">
       <div className="wrap">
-        <SectionHead id="services-h" kicker="Services" title="Three ways we can help" intro="Use one service or combine them. Sourcing and preparation are separate, so you can bring a tender you found yourself." />
+        <SectionHead id="services-h" kicker="Services" title="Everything a bid needs." intro="Use one, or combine them. You can bring a tender you found yourself." center />
         <div className="cards">
           {SERVICES.map((s) => (
-            <article key={s.id} className={`card card-${s.id}`}>
-              <span className="card-icon"><Icon name={s.icon} size={26} /></span>
-              <h3>{s.title}</h3>
+            <article key={s.id} className={`card${s.id === "preparation" ? " card-featured" : ""}`}>
+              {s.id === "preparation" && <p className="card-flag">Most requested</p>}
+              <span className="card-icon"><Icon name={s.icon} size={24} /></span>
+              <h3><Link href={s.more} className="card-title-link">{s.title}</Link></h3>
               <p>{s.body}</p>
-              <div className="card-actions">
-                <CtaLink
-                  href={s.href}
-                  variant={s.id === "preparation" ? "primary" : "secondary"}
-                  event={s.id === "preparation" ? "preparation_cta_clicked" : s.id === "sourcing" ? "sourcing_interest_started" : undefined}
-                  location={`service_card_${s.id}`}
-                >
-                  {s.cta}
-                </CtaLink>
-                <Link href={s.more} className="text-link">
-                  Learn more<span className="sr-only"> about {s.title.toLowerCase()}</span>
-                </Link>
-              </div>
+              <CtaLink
+                href={s.id === "sourcing" ? "#sourcing-form" : s.id === "preparation" ? "#quote-form" : s.href}
+                variant="link"
+                event={s.id === "preparation" ? "preparation_cta_clicked" : s.id === "sourcing" ? "sourcing_interest_started" : undefined}
+                location={`service_card_${s.id}`}
+                arrow
+              >
+                {s.cta}
+              </CtaLink>
             </article>
           ))}
         </div>
@@ -49,43 +55,37 @@ export function ServiceCards() {
   );
 }
 
-export function HowItWorks({ withCta = true }: { withCta?: boolean }) {
+export function HowItWorks() {
   return (
-    <section className="band band-tint" aria-labelledby="how-h">
+    <section className="band band-surface" aria-labelledby="how-h">
       <div className="wrap">
-        <SectionHead id="how-h" kicker="How it works" title="From tender link to approved package" intro="Every assignment follows the same four steps, so you know what happens next and what we need from you." />
+        <SectionHead id="how-h" kicker="How it works" title="Four steps. No surprises." intro="You always know what happens next and what we need from you." center />
         <ol className="steps">
           {STEPS.map((s, i) => (
             <li key={s.title} className="step">
               <span className="step-num" aria-hidden="true">{i + 1}</span>
-              <div>
-                <h3><span className="sr-only">Step {i + 1}: </span>{s.title}</h3>
-                <p>{s.body}</p>
-              </div>
+              <h3><span className="sr-only">Step {i + 1}: </span>{s.title}</h3>
+              <p>{s.body}</p>
             </li>
           ))}
         </ol>
         <p className="fine">
-          Receiving a quotation does not confirm that your business is eligible, and no one can guarantee acceptance or
-          award. The procuring entity evaluates every bid.
+          A quotation does not confirm eligibility, and no one can guarantee acceptance or award. The procuring entity
+          evaluates every bid.
         </p>
-        {withCta && (
-          <div className="center">
-            <CtaLink href="/tender-preparation#quote-form" event="preparation_cta_clicked" location="how_it_works" arrow>
-              {CTA.primary}
-            </CtaLink>
-          </div>
-        )}
       </div>
     </section>
   );
 }
 
-export function SampleBrief({ headingId = "brief-h", compact = false }: { headingId?: string; compact?: boolean }) {
+export function SampleBrief({ headingId = "brief-h" }: { headingId?: string }) {
   const b = SAMPLE_BRIEF;
   return (
-    <figure className={`brief${compact ? " brief-compact" : ""}`} aria-labelledby={headingId}>
-      <div className="brief-stamp">Illustrative requirements brief — sample only</div>
+    <figure className="brief" aria-labelledby={headingId}>
+      <div className="brief-bar">
+        <span className="brief-dots" aria-hidden="true"><i /><i /><i /></span>
+        <span className="brief-stamp">Illustrative requirements brief — sample only</span>
+      </div>
       <figcaption>
         <p className="brief-title" id={headingId}>{b.title}</p>
         <dl className="brief-meta">
@@ -121,8 +121,8 @@ export function SampleBrief({ headingId = "brief-h", compact = false }: { headin
         </table>
       </div>
       <p className="brief-foot">
-        Every row above is invented to show the format. The entity, reference and requirements are fictional. A real brief
-        is based on the issued tender, notes the date it was checked, and marks anything still unknown.
+        Every row is invented to show the format; the entity, reference and requirements are fictional. A real brief is
+        based on the issued tender, notes when it was checked, and marks anything still unknown.
       </p>
     </figure>
   );
@@ -131,25 +131,21 @@ export function SampleBrief({ headingId = "brief-h", compact = false }: { headin
 export function SampleBriefSection() {
   return (
     <section className="band" aria-labelledby="brief-section-h">
-      <div className="wrap split">
-        <div>
-          <SectionHead
-            id="brief-section-h"
-            kicker="See the format"
-            title="A requirements brief you can act on"
-            intro="Before anyone commits time to a bid, a brief sets out what the tender asks for, where it says so, what evidence would answer it and who does what next."
-          />
-          <ul className="ticks">
-            <li><Icon name="link" size={20} /> Each requirement points back to the tender section it came from.</li>
-            <li><Icon name="document" size={20} /> Evidence is named, so you can see gaps early.</li>
-            <li><Icon name="info" size={20} /> Unknowns are marked as unknown, not guessed.</li>
-          </ul>
-          <p className="small muted">
-            A sourcing brief is concise. A full clause-by-clause evidence review is part of a separately quoted preparation
-            or review assignment.
-          </p>
-        </div>
+      <div className="wrap">
+        <SectionHead
+          id="brief-section-h"
+          kicker="See the format"
+          title="Know what a tender asks for, before you commit."
+          intro="A requirements brief lists each requirement, where the tender says it, the evidence that answers it and the next action."
+          center
+        />
         <SampleBrief />
+        <ul className="brief-points">
+          <li><Icon name="link" size={20} /> Traced to the tender section</li>
+          <li><Icon name="document" size={20} /> Evidence named early</li>
+          <li><Icon name="info" size={20} /> Unknowns marked, not guessed</li>
+        </ul>
+        <p className="fine">A sourcing brief is concise. A full clause-by-clause evidence review is part of a separately quoted preparation or review assignment.</p>
       </div>
     </section>
   );
@@ -159,11 +155,11 @@ export function QualityProcess() {
   return (
     <section className="band band-navy" aria-labelledby="quality-h">
       <div className="wrap">
-        <SectionHead id="quality-h" kicker="Quality and confidentiality" title="How we check the work" intro="These are the controls built into every preparation assignment. They reduce avoidable mistakes; they are not a certification or a promise of an error-free bid." />
+        <SectionHead id="quality-h" kicker="Quality and confidentiality" title="Checked by an expert. Approved by you." intro="The controls in every preparation assignment. They reduce avoidable mistakes; they are not a certification or a promise of an error-free bid." center />
         <ol className="controls">
           {QUALITY_CONTROLS.map((c) => (
             <li key={c.title}>
-              <Icon name="check" size={20} />
+              <span className="control-tick"><Icon name="check" size={18} /></span>
               <div>
                 <h3>{c.title}</h3>
                 <p>{c.body}</p>
@@ -171,12 +167,10 @@ export function QualityProcess() {
             </li>
           ))}
         </ol>
-        <div className="split split-even confid">
+        <div className="assurances">
           <div>
             <h3 className="h4"><Icon name="lock" size={20} /> Your documents stay yours</h3>
-            <ul>
-              {CONFIDENTIALITY.map((c) => <li key={c}>{c}</li>)}
-            </ul>
+            <ul>{CONFIDENTIALITY.map((c) => <li key={c}>{c}</li>)}</ul>
           </div>
           <div>
             <h3 className="h4"><Icon name="user" size={20} /> How we use AI</h3>
@@ -201,44 +195,34 @@ export function TaxLine() {
 export function Pricing() {
   const paid = isPaidSourcingConfirmed();
   return (
-    <section className="band" id="pricing" aria-labelledby="pricing-h">
+    <section className="band band-surface" id="pricing" aria-labelledby="pricing-h">
       <div className="wrap">
-        <SectionHead id="pricing-h" kicker="Pricing" title="Know the likely starting fee" intro="Fees are agreed in writing before any preparation begins." />
-        <div className="price-grid">
-          <article className="price-card price-main">
-            <h3>Tender preparation</h3>
-            <p className="price">
-              <span className="from">from</span> {formatKsh(site.pricing.preparationFrom)}
-            </p>
-            <p>
-              Tender preparation from {formatKsh(site.pricing.preparationFrom)} for a straightforward, agreed scope. Your
-              final quotation depends on the tender’s requirements, complexity, number of lots, available documents and
-              deadline.
-            </p>
-            <p className="small muted"><TaxLine /> We never promise a completion time before the scope and our capacity are checked.</p>
-            <CtaLink href="/tender-preparation#quote-form" event="preparation_cta_clicked" location="pricing">{CTA.primary}</CtaLink>
-          </article>
-          <article className="price-card">
+        <SectionHead id="pricing-h" kicker="Pricing" title="Simple, agreed upfront." center />
+        <div className="price-hero">
+          <p className="price-label">Tender preparation</p>
+          <p className="price-big"><span>from</span> {formatKsh(site.pricing.preparationFrom)}</p>
+          <p className="price-copy">
+            Tender preparation from {formatKsh(site.pricing.preparationFrom)} for a straightforward, agreed scope. Your final
+            quotation depends on the tender’s requirements, complexity, number of lots, available documents and deadline.
+          </p>
+          <CtaLink href="#quote-form" event="preparation_cta_clicked" location="pricing">{CTA.primary}</CtaLink>
+          <p className="fine"><TaxLine /> We never promise a completion time before the scope and our capacity are checked.</p>
+        </div>
+        <div className="price-side">
+          <div>
             <h3>Tender sourcing</h3>
-            {paid ? (
-              <p className="price">
-                {formatKsh(site.sourcing.paid.monthlyPrice!)} <span className="from">per month</span>
-              </p>
-            ) : (
-              <p className="price price-text">Register your interest in tailored sourcing</p>
-            )}
             <p>
-              Matched opportunities and concise requirements briefs for your categories and service area.{" "}
-              {!paid && "Paid sourcing is not open yet; registering interest is free and does not start a subscription."}
+              {paid
+                ? `${formatKsh(site.sourcing.paid.monthlyPrice!)} per month.`
+                : "Register your interest in tailored sourcing. Not open for payment yet; registering is free."}
             </p>
-            <CtaLink href="/tender-sourcing#sourcing-form" variant="secondary" event="sourcing_interest_started" location="pricing">{CTA.secondary}</CtaLink>
-          </article>
-          <article className="price-card">
+            <CtaLink href="#sourcing-form" variant="link" event="sourcing_interest_started" location="pricing" arrow>{CTA.secondary}</CtaLink>
+          </div>
+          <div>
             <h3>Printing and submission</h3>
-            <p className="price price-text">Quoted separately</p>
-            <p>Printing, binding and packaging are priced by copies, pages and finishing. Delivery or submission assistance is agreed separately where available.</p>
-            <CtaLink href="/printing-and-submission-support#quote-form" variant="secondary" location="pricing">{CTA.printing}</CtaLink>
-          </article>
+            <p>Quoted separately, by copies, pages and finishing. Delivery or submission help is agreed separately where available.</p>
+            <CtaLink href="/printing-and-submission-support#quote-form" variant="link" location="pricing" arrow>{CTA.printing}</CtaLink>
+          </div>
         </div>
       </div>
     </section>
@@ -247,17 +231,14 @@ export function Pricing() {
 
 export function Founder() {
   return (
-    <section className="band band-tint" aria-labelledby="founder-h">
+    <section className="band" aria-labelledby="founder-h">
       <div className="wrap founder">
         <div className="founder-mark" aria-hidden="true">SK</div>
-        <div>
-          <p className="kicker">Who you will work with</p>
-          <h2 id="founder-h">{site.founderLine}</h2>
-          <p className="lede">
-            Your request is reviewed by a person who prepares tenders, not passed to an automated system. You get a clear
-            scope, direct questions about the evidence you hold, and an expert review before anything is delivered.
-          </p>
-        </div>
+        <h2 id="founder-h">{site.founderLine}</h2>
+        <p className="lede">
+          Your request is read by a person who prepares tenders, not an automated system. You get a clear scope, direct
+          questions about your evidence, and an expert review before anything is delivered.
+        </p>
       </div>
     </section>
   );
@@ -265,9 +246,9 @@ export function Founder() {
 
 export function Faq({ items = FAQS }: { items?: typeof FAQS }) {
   return (
-    <section className="band" aria-labelledby="faq-h">
+    <section className="band band-surface" aria-labelledby="faq-h">
       <div className="wrap narrow">
-        <SectionHead id="faq-h" kicker="Questions" title="Frequently asked questions" />
+        <SectionHead id="faq-h" kicker="Questions" title="Good questions." center />
         <div className="faq">
           {items.map((f) => (
             <details key={f.q}>
@@ -281,66 +262,33 @@ export function Faq({ items = FAQS }: { items?: typeof FAQS }) {
   );
 }
 
-export function QuoteSection({
-  title = "Get a tender preparation quote",
-  intro = "Tell us about the tender and the help you need. We will review the scope and reply with questions or a written quotation.",
-  defaultService,
-}: {
-  title?: string;
-  intro?: string;
-  defaultService?: QuoteService;
-}) {
-  return (
-    <section className="band band-form" id="quote-form" aria-labelledby="quote-form-h">
-      <div className="wrap form-layout">
-        <div className="form-aside">
-          <h2 id="quote-form-h">{title}</h2>
-          <p className="lede">{intro}</p>
-          <ul className="ticks">
-            <li><Icon name="check" size={20} /> No account needed</li>
-            <li><Icon name="check" size={20} /> An official tender link is enough to start</li>
-            <li><Icon name="check" size={20} /> Fees agreed before preparation begins</li>
-          </ul>
-        </div>
-        <div className="form-card">
-          <QuoteForm defaultService={defaultService} />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function SourcingSection() {
-  return (
-    <section className="band band-form" id="sourcing-form" aria-labelledby="sourcing-form-h">
-      <div className="wrap form-layout">
-        <div className="form-aside">
-          <h2 id="sourcing-form-h">Register your interest in tailored sourcing</h2>
-          <p className="lede">
-            Tell us what you supply and where you operate. We will contact you as sourcing opens, with details of what a
-            subscription includes before you decide anything.
-          </p>
-          <ul className="ticks">
-            <li><Icon name="check" size={20} /> Free to register, no payment</li>
-            <li><Icon name="check" size={20} /> Updates only if you tick the consent box</li>
-          </ul>
-        </div>
-        <div className="form-card">
-          <SourcingForm />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function PageHero({ kicker, title, intro, children }: { kicker: string; title: string; intro: string; children?: React.ReactNode }) {
   return (
     <section className="page-hero">
-      <div className="wrap">
+      <div className="wrap center-head">
         <p className="kicker">{kicker}</p>
         <h1>{title}</h1>
         <p className="lede">{intro}</p>
         {children && <div className="hero-actions">{children}</div>}
+      </div>
+    </section>
+  );
+}
+
+export function FeatureGrid({ id, title, intro, items }: { id: string; title: string; intro?: string; items: { icon: string; title: string; body: string }[] }) {
+  return (
+    <section className="band" aria-labelledby={id}>
+      <div className="wrap">
+        <SectionHead id={id} title={title} intro={intro} center />
+        <div className="feature-grid">
+          {items.map((i) => (
+            <div key={i.title} className="feature">
+              <span className="card-icon"><Icon name={i.icon} size={22} /></span>
+              <h3>{i.title}</h3>
+              <p>{i.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

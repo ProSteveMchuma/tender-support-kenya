@@ -29,8 +29,10 @@ export interface SiteConfig {
     email: string | null;
     /** E.164 without spaces, e.g. "+2547XXXXXXXX". */
     phone: string | null;
-    /** Digits only with country code, e.g. "2547XXXXXXXX". */
+    /** Digits only with country code, e.g. "2547XXXXXXXX". Used for click-to-chat. */
     whatsapp: string | null;
+    /** Second WhatsApp number held in reserve; not shown on the site. */
+    whatsappAlternate: string | null;
     registeredAddress: string | null;
     /** e.g. "Monday to Friday, 8 am to 5 pm EAT". */
     hours: string | null;
@@ -48,6 +50,8 @@ export interface SiteConfig {
   services: {
     preparation: Availability;
     review: Availability;
+    /** Facilitating tender/bid securities and post-award securities with the client's chosen issuer. */
+    securities: Availability;
     printing: Availability;
     submissionAssistance: Availability;
   };
@@ -91,7 +95,8 @@ export const site: SiteConfig = {
   contact: {
     email: null,
     phone: null,
-    whatsapp: null,
+    whatsapp: "254719584549",
+    whatsappAlternate: "254715947213",
     registeredAddress: null,
     hours: null,
   },
@@ -103,6 +108,7 @@ export const site: SiteConfig = {
   services: {
     preparation: "available",
     review: "available",
+    securities: "available",
     printing: "available",
     submissionAssistance: "on-request",
   },
@@ -148,6 +154,13 @@ export function isPaidSourcingConfirmed(c: SiteConfig = site): boolean {
     p.fulfilmentConfirmed &&
     p.commercialTermsConfirmed
   );
+}
+
+/** "+254 715 947 213" style display for a configured WhatsApp number. */
+export function whatsappDisplay(c: SiteConfig = site): string | null {
+  const n = c.contact.whatsapp;
+  if (!n || !/^254\d{9}$/.test(n)) return n ? `+${n}` : null;
+  return `+254 ${n.slice(3, 6)} ${n.slice(6, 9)} ${n.slice(9)}`;
 }
 
 export function whatsappLink(c: SiteConfig = site): string | null {

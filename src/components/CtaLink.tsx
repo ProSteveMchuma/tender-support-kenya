@@ -14,7 +14,7 @@ export function CtaLink({
 }: {
   href: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "link";
   event?: AnalyticsEvent;
   location: string;
   arrow?: boolean;

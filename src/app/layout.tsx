@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Public_Sans } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import { site } from "@/config/site";
 import { checkReadiness, hasLeadDestination, isIndexable } from "@/lib/readiness";
 import { siteUrl } from "@/lib/seo";
@@ -10,8 +10,8 @@ import { StickyActions } from "@/components/StickyActions";
 import { AttributionCapture } from "@/components/AttributionCapture";
 import "./globals.css";
 
-const display = Newsreader({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600"], display: "swap" });
-const body = Public_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const display = Inter_Tight({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700"], display: "swap" });
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 
 // Guard: production mode cannot ship while readiness checks fail.
 if (site.productionMode) {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, email: false, address: false },
 };
 
-export const viewport: Viewport = { themeColor: "#f7f3ea", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#f8f5ee", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const plausible = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;

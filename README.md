@@ -1,6 +1,6 @@
 # Tender Support Kenya (working preview)
 
-Lead-generation and service-intake website for a Kenyan tender-support business: tender sourcing (interest registration), separately quoted tender preparation, and optional printing and submission support.
+Lead-generation and service-intake website for a Kenyan tender-support business: tender sourcing (interest registration), separately quoted tender preparation, tender security support (bid bonds and guarantees, facilitated with the client's chosen issuer), and optional printing and submission support.
 
 "Tender Support Kenya" is a descriptive working name, not a confirmed brand. The site ships in **preview mode**: noindex everywhere, a visible preview notice, and forms that say "Preview only — your request has not been sent." until a real lead destination is configured.
 
@@ -60,14 +60,15 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 
 | Area | Status now | What remains |
 | --- | --- | --- |
-| Pages (home + 6) | **Works.** Static, one H1 each, unique titles and descriptions | Owner copy review |
-| Quote form | **Works** with browser and server validation. In preview it returns "Preview only — your request has not been sent." | Set `LEAD_WEBHOOK_URL` + secret |
-| Sourcing-interest form | **Works**, same as above. Consent box is optional and unticked; states no subscription or charge | Same; add an unsubscribe route when update emails are actually sent |
+| Pages (home + 7) | **Works.** Static, one H1 each, unique titles and descriptions | Owner copy review, including the security facts below |
+| Quote form | **Works** as a 3-step flow (service, tender details, contact) with per-step validation, browser and server. In preview it returns "Preview only — your request has not been sent." | Set `LEAD_WEBHOOK_URL` + secret |
+| Sourcing-interest form | **Works** as a 2-step flow, same rules as above. Consent box is optional and unticked; states no subscription or charge | Same; add an unsubscribe route when update emails are actually sent |
 | Lead storage | **Not connected.** Code path tested against a mock: shows success only after the destination confirms the reference; failure shows a retry message and is logged | Deploy `docs/lead-webhook.gs` (or any store that meets the contract) |
 | Staff notification email | **Not connected.** Failures are logged; the saved lead is kept | Resend account and verified sender domain |
 | Spam controls | **Works:** honeypot, minimum fill time, 5 requests per 10 minutes per IP per form, 20 KB body limit | Rate limit is per server instance. For heavy abuse, add Vercel Firewall rules or a shared store (e.g. Upstash) |
 | File uploads | **Disabled and hidden.** Forms explain documents are collected securely after first contact | Needs private storage, content-type sniffing, size limit, signed short-lived URLs and staff-only access before enabling. Not built |
-| WhatsApp / phone / email links | **Hidden** (none configured) | Add real values in `site.contact`; WhatsApp link uses neutral prefilled text |
+| WhatsApp click-to-chat | **Live** on +254 719 584 549 (hero, mobile action bar, contact page, request form, footer). Neutral prefilled text, no tender details. `whatsapp_clicked` event fires on click. +254 715 947 213 is stored as `contact.whatsappAlternate` and not shown | Swap the two values in `src/config/site.ts` to change the main number |
+| Phone / email links | **Hidden** (not configured) | Add real values in `site.contact` |
 | Analytics events | **Works** as browser `CustomEvent("tsk:analytics")`; `quote_request_received` / `sourcing_interest_received` fire only after a server-confirmed 201, and the server logs them too. No names, emails, phones or tender details | Optional Plausible domain |
 | SEO | **Preview:** `noindex` meta, `X-Robots-Tag` header, robots.txt disallows all, empty sitemap, no canonicals, no structured data | All switch on automatically with a domain + `productionMode: true` + passing readiness |
 | Paid sourcing / checkout | **Not built** (by design). `sourcing.mode = "interest"` hides price and checkout | Confirm price, brief limits, coverage, fulfilment and terms first |
@@ -85,6 +86,18 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 7. Review and edit `/privacy` and `/terms`, especially the 12-month inquiry retention period, then set `legal.privacyReviewedByOwner`, `legal.termsReviewedByOwner` and `legal.lastUpdated`.
 8. Run `npm run readiness` with the production env vars. When every line passes, set `productionMode: true` and redeploy. The build refuses to complete if `productionMode` is true while checks fail.
 9. Only then point the public domain at the deployment.
+
+## Tender security support: facts for the owner to confirm
+
+The `/tender-security-support` page describes the service as **facilitation only**: reading the requirement, preparing the application and prescribed form wording, liaising with the client's chosen issuer with their authority, and checking the issued document against the tender. It says plainly that the business does not issue, guarantee or finance securities, that issuer fees are paid by the client, and that the support is quoted separately. It names no banks or insurers. Please confirm before launch:
+
+1. That you are comfortable liaising with issuers on a client's behalf, and what written authority you will ask the client for.
+2. Which issuer types to mention. The page currently says "bank, insurer or other institution the tender accepts". Confirm this matches current Kenyan practice and the tenders you handle.
+3. The Tender Securing Declaration wording. The page says only that "some tenders accept a Tender Securing Declaration instead of a security". If you want to say *when* (for example for particular procurement methods or AGPO-registered groups), confirm the current rule first. I did not state one.
+4. Whether to offer post-award support for performance securities, advance payment guarantees and extensions. The page includes it under "After award"; remove that section if you don't want it.
+5. Typical issuer lead times, if you want to publish guidance. The page currently says only "start as early as possible".
+
+Set `services.securities` to `"unavailable"` in `src/config/site.ts` to hide the page content if you pause this service. The nav, card and form option should then also be removed from `src/config/content.ts` and `src/lib/validation.ts`.
 
 ## Private figures
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site, whatsappLink } from "@/config/site";
+import { site, whatsappDisplay, whatsappLink } from "@/config/site";
 import { NAV } from "@/config/content";
 import { WhatsAppLink } from "./WhatsAppLink";
 
@@ -35,7 +35,7 @@ export function Footer() {
           <ul>
             {c.email && <li><a href={`mailto:${c.email}`}>{c.email}</a></li>}
             {c.phone && <li><a href={`tel:${c.phone}`}>{c.phone}</a></li>}
-            {wa && <li><WhatsAppLink location="footer">WhatsApp</WhatsAppLink></li>}
+            {wa && <li><WhatsAppLink location="footer">WhatsApp {whatsappDisplay()}</WhatsAppLink></li>}
             {c.hours && <li className="muted">{c.hours}</li>}
             {c.registeredAddress && <li className="muted">{c.registeredAddress}</li>}
             <li><Link href="/contact">Send a request online</Link></li>

@@ -4,6 +4,7 @@ export const CTA = {
   primary: "Get a tender preparation quote",
   secondary: "Find suitable tenders",
   printing: "Request printing support",
+  security: "Get help with a tender security",
 } as const;
 
 export const HERO = {
@@ -30,6 +31,15 @@ export const SERVICES = [
     href: "/tender-preparation#quote-form",
     more: "/tender-preparation",
     icon: "document",
+  },
+  {
+    id: "security",
+    title: "Arrange your tender security",
+    body: "Need a bid bond or bank guarantee? We read exactly what the tender requires, help prepare the application for your chosen bank or insurer, and check the issued security matches before you submit.",
+    cta: CTA.security,
+    href: "/tender-security-support#quote-form",
+    more: "/tender-security-support",
+    icon: "shield",
   },
   {
     id: "printing",
@@ -118,6 +128,10 @@ export const FAQS = [
     a: "We use AI tools to assist internal preparation. Expert review remains part of the service before documents are delivered.",
   },
   {
+    q: "Can you provide the tender security for me?",
+    a: "No. Tender and performance securities are issued by a bank, insurer or other institution the tender accepts, under its own approval, charges and any collateral it requires. We help you understand what the tender asks for, prepare the application and check the issued document matches the tender wording before you submit it.",
+  },
+  {
     q: "Can you print and submit the tender?",
     a: "Printing, binding and packaging can be quoted for physical bids. Any delivery or submission assistance must be agreed separately and follow the tender’s instructions.",
   },
@@ -167,7 +181,13 @@ export const SAMPLE_BRIEF = {
 export const NAV = [
   { href: "/tender-preparation", label: "Tender preparation", short: "Preparation" },
   { href: "/tender-sourcing", label: "Tender sourcing", short: "Sourcing" },
+  { href: "/tender-security-support", label: "Tender security support", short: "Securities" },
   { href: "/printing-and-submission-support", label: "Printing and submission", short: "Printing" },
   { href: "/#pricing", label: "Pricing", short: "Pricing" },
   { href: "/contact", label: "Contact", short: "Contact" },
 ];
+
+/** Select FAQs by the start of their question, in the given order. */
+export function faqs(...starts: string[]) {
+  return starts.map((s) => FAQS.find((f) => f.q.startsWith(s))!).filter(Boolean);
+}

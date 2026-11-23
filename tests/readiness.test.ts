@@ -30,5 +30,5 @@ test("paid sourcing needs every term confirmed", () => {
 
 test("no private planning figures in public config", () => {
   const text = JSON.stringify(site);
-  for (const s of ["25000", "40000", "50000", "100000"]) assert.ok(!text.includes(s), s);
+  for (const s of ["25000", "40000", "50000", "100000", "1000,"]) assert.ok(!text.includes(s), s);
 });

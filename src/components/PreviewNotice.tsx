@@ -5,10 +5,13 @@ export function PreviewNotice({ formsLive }: { formsLive: boolean }) {
   return (
     <div className="preview-notice" role="note">
       <div className="wrap">
-        <strong>Preview site.</strong> This is a working preview, not a live service yet.{" "}
-        {formsLive
-          ? "Business details are still being confirmed."
-          : "Forms do not send requests, and business details are still being confirmed."}
+        <span className="pn-dot" aria-hidden="true" />
+        <strong>Preview</strong>
+        <span>
+          {formsLive
+            ? "Business details are being confirmed."
+            : "Online forms don’t send yet. Business details are being confirmed."}
+        </span>
       </div>
     </div>
   );

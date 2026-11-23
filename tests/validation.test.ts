@@ -54,3 +54,13 @@ test("deadline is East Africa Time", () => {
 test("attribution drops anything that looks like an email", () => {
   assert.deepEqual(cleanAttribution({ utm_source: "google", utm_campaign: "a@b.com", name: "Jane" }), { utm_source: "google" });
 });
+
+test("quote: tender security is a valid service", () => {
+  const { errors } = parseQuote({ ...validQuote, service: "security" });
+  assert.deepEqual(errors, {});
+});
+
+test("quote: method-specific message when the chosen detail is missing", () => {
+  const { errors } = parseQuote({ ...validQuote, contactMethod: "whatsapp", phone: "" });
+  assert.equal(errors.phone, "Enter your WhatsApp number.");
+});
