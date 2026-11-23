@@ -35,7 +35,7 @@ export const SERVICES = [
   {
     id: "security",
     title: "Arrange your tender security",
-    body: "Need a bid bond or bank guarantee? We read exactly what the tender requires, help prepare the application for your chosen bank or insurer, and check the issued security matches before you submit.",
+    body: "Need a bid bond or bank guarantee? We read exactly what the tender requires, deal with your chosen bank or insurer on your behalf, and check the issued security matches before you submit.",
     cta: CTA.security,
     href: "/tender-security-support#quote-form",
     more: "/tender-security-support",

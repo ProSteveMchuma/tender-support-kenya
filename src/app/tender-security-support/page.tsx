@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/seo";
 import { CtaLink } from "@/components/CtaLink";
 import { GetStarted } from "@/components/GetStarted";
 import { Icon } from "@/components/Icon";
-import { Faq, FeatureGrid, PageHero, SectionHead, TaxLine } from "@/components/sections";
+import { Faq, FeatureGrid, PageHero, SectionHead } from "@/components/sections";
 
 export const metadata = pageMeta(
   "/tender-security-support",
@@ -15,7 +15,7 @@ export const metadata = pageMeta(
 const STEPS = [
   { icon: "search", title: "Read the requirement", body: "We confirm what the tender asks for: whether a security or a Tender Securing Declaration is required, the form, amount or percentage, validity period and acceptable issuers." },
   { icon: "document", title: "Prepare the application", body: "We help you complete the issuer’s request using the tender’s prescribed security form, so the wording the procuring entity expects is what gets issued." },
-  { icon: "chat", title: "Follow up with your issuer", body: "With your authority, we liaise with the bank, insurer or other institution you choose, so questions are answered quickly and nothing waits in a queue." },
+  { icon: "chat", title: "Deal with your issuer for you", body: "With your written authority, we handle the back-and-forth with the bank, insurer or other institution you choose, so questions are answered quickly and nothing waits in a queue." },
   { icon: "check", title: "Check before you submit", body: "We check the issued document against the tender: name, reference, amount, validity, beneficiary and format, and flag anything that needs correcting while there is still time." },
 ];
 
@@ -32,7 +32,7 @@ export default function Page() {
       <PageHero
         kicker="Tender security support"
         title="The right security, in the right form, on time."
-        intro="Many tenders need a bid bond, bank guarantee or insurance guarantee in a prescribed form. We help you arrange it with the issuer you choose, and check it matches the tender before you submit."
+        intro="Many tenders need a bid bond, bank guarantee or insurance guarantee in a prescribed form. We deal with the issuer you choose on your behalf, and check the security matches the tender before you submit."
       >
         <CtaLink href="#quote-form" location="security_hero" arrow>{CTA.security}</CtaLink>
       </PageHero>
@@ -46,7 +46,7 @@ export default function Page() {
             <ul className="ticks">
               <li><Icon name="check" size={20} /> Explain the security requirement in plain language</li>
               <li><Icon name="check" size={20} /> Prepare the application and the prescribed form wording</li>
-              <li><Icon name="check" size={20} /> Liaise with your chosen issuer, with your authority</li>
+              <li><Icon name="check" size={20} /> Deal with your chosen bank or insurer on your behalf, with your written authority</li>
               <li><Icon name="check" size={20} /> Check the issued security against the tender</li>
             </ul>
           </div>
@@ -54,7 +54,7 @@ export default function Page() {
             <h3 className="h4"><Icon name="info" size={20} /> Good to know</h3>
             <ul>
               <li>We do not issue, guarantee or finance securities. The issuer decides whether to issue one, on its own terms, and may ask for collateral or cash cover.</li>
-              <li>Issuer fees and commissions are paid by you directly. Our support is quoted separately. <TaxLine /></li>
+              <li>Issuer fees, commissions and any collateral are between you and the issuer, and paid by you directly. Our support is quoted separately, with any applicable taxes set out in the quotation.</li>
               <li>Issuers need time. Start as early as possible; we will tell you honestly if the deadline looks too close.</li>
               <li>Some tenders accept a Tender Securing Declaration instead of a security. We help you complete it where the tender allows it.</li>
             </ul>
