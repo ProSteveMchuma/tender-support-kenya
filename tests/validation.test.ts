@@ -64,3 +64,10 @@ test("quote: method-specific message when the chosen detail is missing", () => {
   const { errors } = parseQuote({ ...validQuote, contactMethod: "whatsapp", phone: "" });
   assert.equal(errors.phone, "Enter your WhatsApp number.");
 });
+
+test("sourcing: plan and billing are optional and validated", () => {
+  const base = { companyName: "A", contactName: "B", email: "b@a.co.ke", categories: "x", serviceArea: "y", capabilities: "We supply chairs" };
+  assert.deepEqual(parseSourcing({ ...base, plan: "growth", billing: "annual" }).errors, {});
+  assert.ok(parseSourcing({ ...base, plan: "gold" }).errors.plan);
+  assert.equal(parseSourcing({ ...base, plan: "unsure", billing: "annual" }).data.billing, "");
+});

@@ -55,7 +55,7 @@ export function checkReadiness(c: SiteConfig = defaultSite, env: Env = {}): Read
     },
     {
       id: "sourcing",
-      label: "Sourcing mode is 'interest', or every paid-sourcing term is confirmed",
+      label: "Sourcing plans: coverage, fulfilment and subscription terms confirmed (or mode set back to 'interest')",
       ok: c.sourcing.mode === "interest" || isPaidSourcingConfirmed(c),
     },
     {

@@ -23,7 +23,7 @@ function doPost(e) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(lead.kind === "quote" ? "quote" : "sourcing");
   var cols = lead.kind === "quote"
     ? ["reference", "receivedAt", "service", "companyName", "contactName", "contactMethod", "email", "phone", "tenderReference", "deadline", "deadlineUtc", "lotsOrCopies", "description"]
-    : ["reference", "receivedAt", "companyName", "contactName", "email", "categories", "serviceArea", "capabilities", "updatesConsent"];
+    : ["reference", "receivedAt", "plan", "billing", "companyName", "contactName", "email", "categories", "serviceArea", "capabilities", "updatesConsent"];
   if (sheet.getLastRow() === 0) sheet.appendRow(cols.concat(["attribution", "status"]));
   sheet.appendRow(cols.map(function (c) { return lead[c] === undefined ? "" : lead[c]; })
     .concat([JSON.stringify(lead.attribution || {}), "new"]));

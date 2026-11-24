@@ -191,3 +191,10 @@ export const NAV = [
 export function faqs(...starts: string[]) {
   return starts.map((s) => FAQS.find((f) => f.q.startsWith(s))!).filter(Boolean);
 }
+
+/** Plan positioning lines. Prices and inclusions live in src/config/site.ts. */
+export const PLAN_COPY: Record<"starter" | "growth" | "pro", { forWho: string; whatsapp: string }> = {
+  starter: { forWho: "For focused suppliers watching a few categories.", whatsapp: "Hello, I would like to ask about the TenderPro Starter plan." },
+  growth: { forWho: "For businesses that bid every month.", whatsapp: "Hello, I would like to ask about the TenderPro Growth plan." },
+  pro: { forWho: "For firms running a full bid pipeline.", whatsapp: "Hello, I would like to ask about the TenderPro Pro plan." },
+};

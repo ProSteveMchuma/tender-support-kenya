@@ -3,6 +3,8 @@ import { pageMeta } from "@/lib/seo";
 import { CtaLink } from "@/components/CtaLink";
 import { GetStarted } from "@/components/GetStarted";
 import { Faq, FeatureGrid, PageHero, SampleBrief, SectionHead } from "@/components/sections";
+import { Plans } from "@/components/Plans";
+import { formatKsh, showPlans, site } from "@/config/site";
 
 export const metadata = pageMeta(
   "/tender-sourcing",
@@ -18,6 +20,7 @@ const HOW = [
 ];
 
 export default function Page() {
+  const plans = showPlans();
   return (
     <>
       <PageHero
@@ -27,9 +30,21 @@ export default function Page() {
       >
         <CtaLink href="#sourcing-form" event="sourcing_interest_started" location="sourcing_hero">{CTA.secondary}</CtaLink>
       </PageHero>
-      <p className="center-note">Paid sourcing is not open yet. Registering interest is free and does not start a subscription.</p>
+      <p className="center-note">
+        {plans
+          ? `Plans from ${formatKsh(Math.min(...site.sourcing.plans.map((p) => p.monthlyPrice)))} a month. Nothing is paid online; we confirm your details, then invoice.`
+          : "Paid sourcing is not open yet. Registering interest is free and does not start a subscription."}
+      </p>
       <FeatureGrid id="sourcing-how-h" title="How tailored sourcing works." items={HOW} />
-      <section className="band band-surface" aria-labelledby="brief-vs-h">
+      {plans && (
+        <section className="band band-surface" aria-labelledby="plans-h">
+          <div className="wrap">
+            <SectionHead id="plans-h" kicker="Plans" title="Pick the pace you bid at." intro="Every plan matches new tenders to what you supply. Higher plans add full requirements briefs, faster alerts and savings on preparation." center />
+            <Plans headingLevel="h3" />
+          </div>
+        </section>
+      )}
+      <section className="band" aria-labelledby="brief-vs-h">
         <div className="wrap">
           <SectionHead
             id="brief-vs-h"
@@ -41,7 +56,11 @@ export default function Page() {
         </div>
       </section>
       <Faq items={faqs("Do I need to subscribe", "Can you help with a tender I found", "Do you use AI")} />
-      <GetStarted defaultTab="sourcing" title="Register your interest in tailored sourcing" intro="Two short steps. Free, no payment, and updates only if you ask for them." />
+      <GetStarted
+        defaultTab="sourcing"
+        title={plans ? "Start with tender sourcing" : "Register your interest in tailored sourcing"}
+        intro={plans ? "Two short steps. Nothing is charged here: we confirm your details, then send an invoice for your plan." : "Two short steps. Free, no payment, and updates only if you ask for them."}
+      />
     </>
   );
 }

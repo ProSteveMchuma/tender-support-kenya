@@ -13,6 +13,23 @@
 
 export type SourcingMode = "interest" | "paid";
 
+export type PlanId = "starter" | "growth" | "pro";
+
+export interface SourcingPlan {
+  id: PlanId;
+  name: string;
+  monthlyPrice: number;
+  /** Max categories matched; null = no set limit on categories (not on analysis). */
+  categories: number | null;
+  briefsPerMonth: number;
+  alerts: "weekly-digest" | "within-24h";
+  preparationDiscountPct: number;
+  complianceReminders: boolean;
+  bidCalendar: boolean;
+  priorityTurnaround: boolean;
+  recommended?: boolean;
+}
+
 export type Availability = "available" | "on-request" | "unavailable";
 
 export interface SiteConfig {
@@ -56,15 +73,21 @@ export interface SiteConfig {
     submissionAssistance: Availability;
   };
   sourcing: {
+    /**
+     * "interest": prices hidden, interest registration only.
+     * "paid": published plans with sign-up by request. Nothing is paid online;
+     * the owner confirms scope and sends an invoice.
+     */
     mode: SourcingMode;
-    /** Only used when mode === "paid" and every field is confirmed. */
-    paid: {
-      monthlyPrice: number | null;
-      briefsIncludedPerMonth: number | null;
-      coverage: string | null;
-      fulfilmentConfirmed: boolean;
-      commercialTermsConfirmed: boolean;
-    };
+    plans: SourcingPlan[];
+    /** Annual billing = this many months charged for 12 months of service. */
+    annualMonthsCharged: number;
+    /** Sources/areas monitored, as the owner describes them. null until confirmed. */
+    coverage: string | null;
+    /** Owner confirms the team can deliver every plan's promises (alerts, briefs, reminders). */
+    fulfilmentConfirmed: boolean;
+    /** Owner confirms subscription terms: billing, renewal, cancellation, refunds. */
+    commercialTermsConfirmed: boolean;
   };
   uploads: {
     /** Upload controls only show when this is true AND private storage is configured server-side. */
@@ -113,14 +136,17 @@ export const site: SiteConfig = {
     submissionAssistance: "on-request",
   },
   sourcing: {
-    mode: "interest",
-    paid: {
-      monthlyPrice: null,
-      briefsIncludedPerMonth: null,
-      coverage: null,
-      fulfilmentConfirmed: false,
-      commercialTermsConfirmed: false,
-    },
+    mode: "paid",
+    // Prices and inclusions approved by the owner on 24 Nov 2026.
+    plans: [
+      { id: "starter", name: "Starter", monthlyPrice: 2500, categories: 3, briefsPerMonth: 0, alerts: "weekly-digest", preparationDiscountPct: 0, complianceReminders: false, bidCalendar: false, priorityTurnaround: false },
+      { id: "growth", name: "Growth", monthlyPrice: 6500, categories: 8, briefsPerMonth: 4, alerts: "within-24h", preparationDiscountPct: 10, complianceReminders: false, bidCalendar: false, priorityTurnaround: false, recommended: true },
+      { id: "pro", name: "Pro", monthlyPrice: 15000, categories: null, briefsPerMonth: 12, alerts: "within-24h", preparationDiscountPct: 15, complianceReminders: true, bidCalendar: true, priorityTurnaround: true },
+    ],
+    annualMonthsCharged: 10,
+    coverage: null,
+    fulfilmentConfirmed: false,
+    commercialTermsConfirmed: false,
   },
   uploads: {
     enabled: false,
@@ -144,16 +170,19 @@ export function formatKsh(amount: number): string {
   return `KSh ${amount.toLocaleString("en-KE")}`;
 }
 
+/** Paid sourcing may go live only when every operational term is confirmed. */
 export function isPaidSourcingConfirmed(c: SiteConfig = site): boolean {
-  const p = c.sourcing.paid;
-  return (
-    c.sourcing.mode === "paid" &&
-    p.monthlyPrice !== null &&
-    p.briefsIncludedPerMonth !== null &&
-    !!p.coverage &&
-    p.fulfilmentConfirmed &&
-    p.commercialTermsConfirmed
-  );
+  const s = c.sourcing;
+  return s.mode === "paid" && s.plans.length > 0 && !!s.coverage && s.fulfilmentConfirmed && s.commercialTermsConfirmed;
+}
+
+/** Whether to show published plans and prices on the site. */
+export function showPlans(c: SiteConfig = site): boolean {
+  return c.sourcing.mode === "paid" && c.sourcing.plans.length > 0;
+}
+
+export function annualPrice(plan: SourcingPlan, c: SiteConfig = site): number {
+  return plan.monthlyPrice * c.sourcing.annualMonthsCharged;
 }
 
 /** "+254 715 947 213" style display for a configured WhatsApp number. */

@@ -35,7 +35,12 @@ export interface QuoteInput {
   privacyAcknowledged: boolean;
 }
 
+export const PLAN_CHOICES = ["starter", "growth", "pro", "unsure"] as const;
+export const BILLING_CHOICES = ["monthly", "annual"] as const;
+
 export interface SourcingInput {
+  plan: (typeof PLAN_CHOICES)[number] | "";
+  billing: (typeof BILLING_CHOICES)[number] | "";
   companyName: string;
   contactName: string;
   email: string;
@@ -133,6 +138,8 @@ export function parseQuote(raw: Record<string, unknown>): { data: QuoteInput; er
 
 export function parseSourcing(raw: Record<string, unknown>): { data: SourcingInput; errors: Errors<SourcingInput> } {
   const data: SourcingInput = {
+    plan: str(raw.plan) as SourcingInput["plan"],
+    billing: str(raw.billing) as SourcingInput["billing"],
     companyName: str(raw.companyName),
     contactName: str(raw.contactName),
     email: str(raw.email),
@@ -142,6 +149,9 @@ export function parseSourcing(raw: Record<string, unknown>): { data: SourcingInp
     updatesConsent: raw.updatesConsent === true || raw.updatesConsent === "on",
   };
   const e: Errors<SourcingInput> = {};
+  if (data.plan && !PLAN_CHOICES.includes(data.plan)) e.plan = "Choose a plan, or “Not sure”.";
+  if (data.billing && !BILLING_CHOICES.includes(data.billing)) e.billing = "Choose monthly or annual billing.";
+  if (!data.plan || data.plan === "unsure") data.billing = "";
   if (!data.companyName) e.companyName = "Enter your company or business name.";
   else e.companyName = tooLong(data.companyName, LIMITS.name);
   if (!data.contactName) e.contactName = "Enter your name.";

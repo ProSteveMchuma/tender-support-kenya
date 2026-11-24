@@ -71,7 +71,8 @@ All server-only unless prefixed `NEXT_PUBLIC_`. See `.env.example`. Static pages
 | Phone / email links | **Hidden** (not configured) | Add real values in `site.contact` |
 | Analytics events | **Works** as browser `CustomEvent("tsk:analytics")`; `quote_request_received` / `sourcing_interest_received` fire only after a server-confirmed 201, and the server logs them too. No names, emails, phones or tender details | Optional Plausible domain |
 | SEO | **Preview:** `noindex` meta, `X-Robots-Tag` header, robots.txt disallows all, empty sitemap, no canonicals, no structured data | All switch on automatically with a domain + `productionMode: true` + passing readiness |
-| Paid sourcing / checkout | **Not built** (by design). `sourcing.mode = "interest"` hides price and checkout | Confirm price, brief limits, coverage, fulfilment and terms first |
+| Sourcing plans | **Live in preview.** Starter KSh 2,500, Growth KSh 6,500 (recommended), Pro KSh 15,000 a month; annual = 10 months' price (2 months free). Shown on the home page pricing section and `/tender-sourcing#plans` with a monthly/annual switch, a two-question plan finder, a comparison table and a WhatsApp link per plan. "Choose plan" pre-fills the sourcing form; nothing is charged online | Confirm coverage, fulfilment and subscription terms (see below), then the readiness check passes |
+| Online payment / checkout | **Not built** (by design). Plans are invoiced after you confirm details | None for launch |
 | Payments | **Not built** (by design). Quotes and invoices are handled offline | None for launch |
 | Privacy notice / terms | **Drafts**, flagged "Draft for owner review" | Owner (ideally with legal advice) reviews, then set the `legal.*Reviewed` flags |
 
@@ -98,6 +99,31 @@ The `/tender-security-support` page describes the service as **facilitation only
 5. **Lead times (decided 23 Nov 2026):** no fixed times published. The page says processing times vary by issuer and to start as early as possible.
 
 Set `services.securities` to `"unavailable"` in `src/config/site.ts` to hide the page content if you pause this service. The nav, card and form option should then also be removed from `src/config/content.ts` and `src/lib/validation.ts`.
+
+## Sourcing plans
+
+Approved by Steve on 24 Nov 2026. Edit `sourcing.plans` in `src/config/site.ts`; every price, card, comparison row and form option is generated from it.
+
+| | Starter | Growth (recommended) | Pro |
+| --- | --- | --- | --- |
+| Monthly | KSh 2,500 | KSh 6,500 | KSh 15,000 |
+| Annual (2 months free) | KSh 25,000 | KSh 65,000 | KSh 150,000 |
+| Categories | Up to 3 | Up to 8 | No limit (categories and counties) |
+| Matches | Weekly digest, WhatsApp or email | Alerts within 24 hours of publication | Alerts within 24 hours |
+| Fit note on each match | Yes | Yes | Yes |
+| Full requirements briefs | None | 4 a month | 12 a month |
+| Extras | | 10% off preparation | 15% off preparation, monthly bid calendar, compliance-document expiry reminders, priority turnaround |
+
+How it's shown: a monthly/annual switch, a two-question "which plan fits me" finder that highlights a card, Growth as the dark "Recommended" card, a WhatsApp link per plan with neutral text, a collapsible comparison table, and plain fine print. Choosing a plan opens the sourcing form with that plan and billing pre-selected. The form saves `plan` and `billing` with the lead.
+
+What the site does **not** say: no win rates, client counts or "pays for itself" claims. "No limit" applies to categories and counties only. Briefs are capped per plan.
+
+Still to confirm before launch (the readiness check fails until these are set in `src/config/site.ts`):
+
+1. `sourcing.coverage`: which official sources you monitor and how often. The "within 24 hours" promise depends on it.
+2. `sourcing.fulfilmentConfirmed`: you can deliver every plan's promises at the volume you expect. That covers 24-hour alerts, 4 or 12 briefs a month, bid calendars and compliance reminders.
+3. `sourcing.commercialTermsConfirmed`: billing date, renewal, cancellation, refunds, and what happens to unused briefs. Add these to `/terms`.
+4. Tax treatment on subscriptions (`pricing.taxStatement`).
 
 ## Private figures
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { formatKsh, isPaidSourcingConfirmed, site } from "@/config/site";
+import { formatKsh, showPlans, site } from "@/config/site";
+import { Plans } from "./Plans";
 import { AI_STATEMENT, CONFIDENTIALITY, CTA, FAQS, QUALITY_CONTROLS, SAMPLE_BRIEF, SERVICES, STEPS } from "@/config/content";
 import { CtaLink } from "./CtaLink";
 import { Icon } from "./Icon";
@@ -193,7 +194,8 @@ export function TaxLine() {
 }
 
 export function Pricing() {
-  const paid = isPaidSourcingConfirmed();
+  const plans = showPlans();
+  const from = Math.min(...site.sourcing.plans.map((p) => p.monthlyPrice));
   return (
     <section className="band band-surface" id="pricing" aria-labelledby="pricing-h">
       <div className="wrap">
@@ -208,22 +210,32 @@ export function Pricing() {
           <CtaLink href="#quote-form" event="preparation_cta_clicked" location="pricing">{CTA.primary}</CtaLink>
           <p className="fine"><TaxLine /> We never promise a completion time before the scope and our capacity are checked.</p>
         </div>
-        <div className="price-side">
-          <div>
-            <h3>Tender sourcing</h3>
-            <p>
-              {paid
-                ? `${formatKsh(site.sourcing.paid.monthlyPrice!)} per month.`
-                : "Register your interest in tailored sourcing. Not open for payment yet; registering is free."}
-            </p>
-            <CtaLink href="#sourcing-form" variant="link" event="sourcing_interest_started" location="pricing" arrow>{CTA.secondary}</CtaLink>
+
+        {plans ? (
+          <div className="plans-block">
+            <div className="section-head center-head">
+              <p className="kicker">Tender sourcing plans</p>
+              <h3 className="h2-like">Pick the pace you bid at.</h3>
+              <p className="lede">
+                Every plan matches new tenders to what you supply. Higher plans add full requirements briefs, faster alerts
+                and savings on preparation.
+              </p>
+            </div>
+            <Plans headingLevel="h3" />
           </div>
-          <div>
-            <h3>Printing and submission</h3>
-            <p>Quoted separately, by copies, pages and finishing. Delivery or submission help is agreed separately where available.</p>
-            <CtaLink href="/printing-and-submission-support#quote-form" variant="link" location="pricing" arrow>{CTA.printing}</CtaLink>
+        ) : (
+          <div className="price-side">
+            <div>
+              <h3>Tender sourcing</h3>
+              <p>Register your interest in tailored sourcing. Not open for payment yet; registering is free.</p>
+              <CtaLink href="#sourcing-form" variant="link" event="sourcing_interest_started" location="pricing" arrow>{CTA.secondary}</CtaLink>
+            </div>
           </div>
-        </div>
+        )}
+        <p className="fine">
+          Tender securities and printing are quoted separately.{" "}
+          {plans && `Sourcing plans start from ${formatKsh(from)} a month.`}
+        </p>
       </div>
     </section>
   );
